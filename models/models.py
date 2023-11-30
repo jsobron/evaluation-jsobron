@@ -103,7 +103,8 @@ def convert_hours(self, value):
     return val
 
 
-# TODO 02: Refactorizar
+# TODO 02:
+#  Refactorizar
 @api.onchange('line_id')
 def _get_packet_publishable_product_type(self):
     if self:
@@ -122,7 +123,7 @@ def _get_packet_publishable_product_type(self):
 
 # TODO 03:
 #  Refactorizar
-#  Agregar una condición para cuando no se encuentre el 'publishable_product_type' lanzar una excepción de Odoo
+#  Agregar una condición para cualquier otro valor de 'publishable_product_type' lanzar una excepción de Odoo
 #  Sustentar el tipo de excepción que usó(¿Por que?)
 def packet_product_action_publish(self):
     for rec in self:
