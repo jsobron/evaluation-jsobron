@@ -1,125 +1,24 @@
 # TODO 01:
-#  Refactorizar
-def convert_hours(self, value):
-    val = ''
-    if value == '1':
-        val = '01:00'
-    if value == '1.5':
-        val = '01:30'
-    if value == '2':
-        val = '02:00'
-    if value == '2.5':
-        val = '02:30'
-    if value == '3':
-        val = '03:00'
-    if value == '3.5':
-        val = '03:30'
-    if value == '4':
-        val = '04:00'
-    if value == '4.5':
-        val = '04:30'
-    if value == '5':
-        val = '05:00'
-    if value == '5.5':
-        val = '05:30'
-    if value == '6':
-        val = '06:00'
-    if value == '6.5':
-        val = '06:30'
-    if value == '7':
-        val = '07:00'
-    if value == '7.5':
-        val = '07:30'
-    if value == '8':
-        val = '08:00'
-    if value == '8.5':
-        val = '08:30'
-    if value == '9':
-        val = '09:00'
-    if value == '9.5':
-        val = '09:30'
-    if value == '10':
-        val = '10:00'
-    if value == '10.5':
-        val = '10:30'
-    if value == '11':
-        val = '11:00'
-    if value == '11.5':
-        val = '11:30'
-    if value == '12':
-        val = '12:00'
-    if value == '12.5':
-        val = '12:30'
-    if value == '13':
-        val = '13:00'
-    if value == '13.5':
-        val = '13:30'
-    if value == '14':
-        val = '14:00'
-    if value == '14.5':
-        val = '15:30'
-    if value == '15':
-        val = '15:00'
-    if value == '15.5':
-        val = '15:30'
-    if value == '16':
-        val = '16:00'
-    if value == '16.5':
-        val = '16:30'
-    if value == '17':
-        val = '17:00'
-    if value == '17.5':
-        val = '17:30'
-    if value == '18':
-        val = '18:00'
-    if value == '18.5':
-        val = '18:30'
-    if value == '19':
-        val = '19:00'
-    if value == '19.5':
-        val = '19:30'
-    if value == '20':
-        val = '20:00'
-    if value == '20.5':
-        val = '20:30'
-    if value == '21':
-        val = '21:00'
-    if value == '21.5':
-        val = '21:30'
-    if value == '22':
-        val = '22:00'
-    if value == '22.5':
-        val = '22:30'
-    if value == '23':
-        val = '23:00'
-    if value == '23.5':
-        val = '23:30'
-    if value == '23.9':
-        val = '23:59'
-    if value == '0':
-        val = '00:00'
-    if value == '0.5':
-        val = '00:30'
-    return val
+
+def convert_hours(self, value): #Recibo los valores
+    try:
+        hours = int(float(value))    #Paso a float el valor
+        minutes = int((float(value) - hours) * 60) #Tomo los minutos que tenemos y lo multiplico por 60
+        return f"{hours:02d}:{minutes:02d}" #Retornamos hora y minutos convertidos
+    except ValueError:
+        return 'No es posible completar la conversión'
 
 
 # TODO 02:
 #  Refactorizar
 @api.onchange('line_id')
 def _get_packet_publishable_product_type(self):
-    if self:
-        for record in self:
-            data_products = record.env['product.product'].search([('id', '=', record.product_id.id)])
-            for data_product in data_products:
-                if data_product:
-                    for data in data_product:
-                        if data.publishable_ok:
-                            record.publishable_product_type = data.publishable_product_type
-                        else:
-                            record.publishable_product_type = 'notp'
-                else:
-                    record.publishable_product_type = 'notp'
-
+    for record in self:
+        data_product = record.env['product.product'].browse(record.product_id.id)  #Cambio search por browse para traerme todo el registro
+        if data_product and data_product.publishable_ok: #Al tener todo el registro, simplifico los dos ifs en 1 solo con doble condicion
+            record.publishable_product_type = data_product.publishable_product_type
+        else:
+            record.publishable_product_type = 'notp'
 
 # TODO 03:
 #  Refactorizar
@@ -216,6 +115,4 @@ def packet_product_action_publish(self):
 # TODO 04:
 #  Refactorizar
 def get_select_sequence(self):
-    select_list_sequence = [('1', '1'), ('2', '2'), ('3', '3'), ('4', '4'), ('5', '5'), ('6', '6'), ('7', '7'),
-                            ('8', '8'), ('9', '9'), ('10', '10')]
-    return select_list_sequence
+    return [(str(i), str(i)) for i in range(1, 11)]
